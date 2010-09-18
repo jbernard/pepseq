@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import gettext
 import logging
 import optparse
 import os
@@ -20,7 +19,7 @@ if (os.path.exists(os.path.join(PROJECT_ROOT_DIRECTORY, 'pepseq'))
     sys.path.insert(0, PROJECT_ROOT_DIRECTORY)
     os.putenv('PYTHONPATH', PROJECT_ROOT_DIRECTORY) # for subprocesses
 
-from pepseq import pepseqconfig
+from pepseq.core import __version__
 
 LEVELS = (  logging.ERROR,
             logging.WARNING,
@@ -30,10 +29,9 @@ LEVELS = (  logging.ERROR,
 
 if __name__ == "__main__":
 
-    version = pepseqconfig.__pepseq_data_directory__
     # Support for command line options.
     usage = _("pepseq [options]")
-    parser = optparse.OptionParser(version="pepseq %s" % version, usage=usage)
+    parser = optparse.OptionParser(version="pepseq %s" % __version__, usage=usage)
     parser.add_option('-d', '--debug', dest='debug_mode', action='store_true',
         help=_('Print the maximum debugging info (implies -vv)'))
     parser.add_option('-v', '--verbose', dest='logging_level', action='count',
