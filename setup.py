@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import pepseq
 from distutils.core import setup
-from pepseq.core import __version__
 
 setup(name='pepseq',
-      version=__version__,
+      version=pepseq.__version__,
       description='A peptide sequencing application',
       long_description=open('README.md').read(),
       author='Jon Bernard',
