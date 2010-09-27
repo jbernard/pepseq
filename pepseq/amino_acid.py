@@ -37,6 +37,25 @@ class AminoAcid(object):
         return "%s (%s, %s) MW: %.2f" % (
                 self.name, self.triple, self.letter, self.weight)
 
+
+class Peptide(object):
+
+    def __init__(self, amino_acids):
+        self.weight = 0
+        self.string = ""
+        self.amino_acids = amino_acids
+        for amino_acid in self.amino_acids:
+            self.weight += amino_acid.weight
+            self.string += ('%s' % (amino_acid.letter.lower()))
+            if amino_acid is not self.amino_acids[-1]:
+                self.string += ','
+
+    def __cmp__(self, other):
+        return cmp(self.weight, other.weight)
+
+    def __str__(self):
+        return "%d: %s" % (self.weight, self.string)
+
 if __name__ == '__main__':
 
     import itertools
@@ -49,13 +68,11 @@ if __name__ == '__main__':
             ((AminoAcid('r'), AminoAcid('q'), AminoAcid('h'))),
     )
 
-    sequences = list(itertools.product(*fragment))
+    peptides = []
+    sequences = tuple(itertools.product(*fragment))
     for sequence in sequences:
-        weight = 0
-        string = ""
-        for amino_acid in sequence:
-            weight += amino_acid.weight
-            string += ('%s' % (amino_acid.letter))
-            if amino_acid is not sequence[-1]:
-                string += ','
-        print "%d: %s" % (weight, string)
+        peptides.append(Peptide(sequence))
+
+    peptides.sort()
+    for peptide in peptides:
+        print peptide
