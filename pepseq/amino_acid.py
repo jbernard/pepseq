@@ -36,3 +36,26 @@ class AminoAcid(object):
     def __str__(self):
         return "%s (%s, %s) MW: %.2f" % (
                 self.name, self.triple, self.letter, self.weight)
+
+if __name__ == '__main__':
+
+    import itertools
+
+    fragment = (
+            ((AminoAcid('a'), AminoAcid('t'), AminoAcid('k'))),
+            ((AminoAcid('r'), AminoAcid('q'), AminoAcid('h'))),
+            ((AminoAcid('r'), AminoAcid('q'), AminoAcid('h'))),
+            ((AminoAcid('r'), AminoAcid('q'), AminoAcid('h'))),
+            ((AminoAcid('r'), AminoAcid('q'), AminoAcid('h'))),
+    )
+
+    sequences = list(itertools.product(*fragment))
+    for sequence in sequences:
+        weight = 0
+        string = ""
+        for amino_acid in sequence:
+            weight += amino_acid.weight
+            string += ('%s' % (amino_acid.letter))
+            if amino_acid is not sequence[-1]:
+                string += ','
+        print "%d: %s" % (weight, string)
