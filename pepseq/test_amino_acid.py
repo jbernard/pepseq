@@ -146,6 +146,13 @@ class AminoAcidTestCase(unittest.TestCase):
         self.assertEqual(amino_acid.letter, "R")
         self.assertEqual(amino_acid.weight, 156.19)
 
+    def test_borono_phenylalanine(self):
+        amino_acid = AminoAcid('b')
+        self.assertEqual(amino_acid.name, "Borono Phenylalanine")
+        self.assertEqual(amino_acid.triple, "Bpa")
+        self.assertEqual(amino_acid.letter, "B")
+        self.assertEqual(amino_acid.weight, 309.08)
+
 
 def suite():
     suite = unittest.TestLoader().loadTestsFromTestCase(AminoAcidTestCase)
