@@ -17,6 +17,11 @@ if (os.path.exists(os.path.join(PROJECT_ROOT_DIRECTORY, 'pepseq'))
 import logging
 import optparse
 import pepseq
+import itertools
+
+import ConfigParser
+
+import pepseq.amino_acid
 
 import gettext
 from gettext import gettext as _
@@ -29,39 +34,105 @@ LEVELS = (logging.ERROR,
 
 
 def parse_args():
-    usage = _("pepseq [options]")
+    usage = _("pepseq [options] <inputfile>")
     parser = optparse.OptionParser(version="pepseq %s" % pepseq.__version__,
                                    usage=usage)
     parser.add_option('-d', '--debug', dest='debug_mode', action='store_true',
         help=_('Print the maximum debugging info (implies -vv)'))
     parser.add_option('-v', '--verbose', dest='logging_level', action='count',
         help=_('set error_level output to warning, info, and then debug'))
-    parser.add_option("-f", "--foo", action="store", dest="foo",
-                      help=_("foo should be assigned to bar"))
-    parser.set_defaults(logging_level=0, foo=None)
-    return parser.parse_args()
 
+    parser.set_defaults(logging_level=0)
 
-def main():
-    (options, args) = parse_args()
+    (options, args) = parser.parse_args()
 
     if options.debug_mode:
         loglevel = 3
     else:
         try:
             loglevel = LEVELS[options.logging_level]
-            print 'loglevel: %d, options.logging_level: %d' % (loglevel, options.logging_level)
         except IndexError:
             loglevel = 3
 
-    logging.basicConfig(level=loglevel, format='%(asctime)s %(levelname)s %(message)s')
+    logging.basicConfig(level=loglevel,
+            format='%(asctime)s %(levelname)s %(message)s')
 
-    if options.foo == 'bar':
-        logging.warning(_('easter egg found'))
-        print(_("Schweet"))
+    return parser.parse_args()
 
-    print _("I'm launched and my args are: %s") % (" ".join(args))
-    logging.debug(_('end of prog'))
+
+def main():
+    (options, args) = parse_args()
+
+    config = ConfigParser.ConfigParser()
+
+    try:
+        config.readfp(open(args[0]))
+    except IndexError:
+        try:
+            config.readfp(open("sample-input"))
+        except IOError:
+            config.readfp(open("../sample-input"))
+
+    bucket1 = []
+    for char in config.get('DEFAULT', 'bucket1').split(' '):
+        bucket1.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket2 = []
+    for char in config.get('DEFAULT', 'bucket2').split(' '):
+        bucket2.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket3 = []
+    for char in config.get('DEFAULT', 'bucket3').split(' '):
+        bucket3.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket4 = []
+    for char in config.get('DEFAULT', 'bucket4').split(' '):
+        bucket4.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket5 = []
+    for char in config.get('DEFAULT', 'bucket5').split(' '):
+        bucket5.append(pepseq.amino_acid.AminoAcid(char))
+        bucket5.append(pepseq.amino_acid.AminoAcid('N'))
+
+    bucket6 = []
+    for char in config.get('DEFAULT', 'bucket6').split(' '):
+        bucket6.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket7 = []
+    for char in config.get('DEFAULT', 'bucket7').split(' '):
+        bucket7.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket8 = []
+    for char in config.get('DEFAULT', 'bucket8').split(' '):
+        bucket8.append(pepseq.amino_acid.AminoAcid(char))
+
+    bucket9 = []
+    for char in config.get('DEFAULT', 'bucket9').split(' '):
+        bucket9.append(pepseq.amino_acid.AminoAcid(char))
+
+    possibilities = (bucket1, bucket2, bucket3,
+                     bucket4, bucket5, bucket6,
+                     bucket7, bucket8, bucket9)
+
+    peptides = []
+    sequences = tuple(itertools.product(*possibilities))
+    for sequence in sequences:
+        if sequence[4].letter == 'K':
+            peptide = pepseq.amino_acid.Peptide(sequence)
+            peptide.branch_before(4)
+            peptides.append(peptide)
+
+    peptides.sort()
+
+    output = []
+    for peptide in peptides:
+        if peptide.weight > float(config.get('DEFAULT', 'low')):
+            if peptide.weight < float(config.get('DEFAULT', 'high')):
+                output.append(peptide)
+
+    print 'Number of matches: %d' % len(output)
+    for peptide in output:
+        print ("%.2f  %s   " % (peptide.weight, peptide) + '  '.join(peptide.subweights))
 
 if __name__ == "__main__":
     main()
