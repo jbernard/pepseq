@@ -27,6 +27,7 @@ class AminoAcid(object):
                   'K': ('Lysine',                   'Lys', 128.10),
                   'R': ('Arginine',                 'Arg', 156.10),
                   'B': ('Borono Lysine',            'Bpl', 394.10),
+                  'Z': ('Borono Phenylalanine',     'Bpa', 309.10),
     }
 
     def __init__(self, letter):
