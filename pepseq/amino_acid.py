@@ -26,7 +26,7 @@ class AminoAcid(object):
                   'H': ('Histidine',                'His', 137.10),
                   'K': ('Lysine',                   'Lys', 128.10),
                   'R': ('Arginine',                 'Arg', 156.10),
-                  'B': ('Borono Phenylalanine',     'Bpa', 394.10),
+                  'B': ('Borono Lysine',            'Bpl', 394.10),
     }
 
     def __init__(self, letter):
