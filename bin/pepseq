@@ -88,11 +88,11 @@ def main():
     bucket4 = []
     for char in config.get('DEFAULT', 'bucket4').split(' '):
         bucket4.append(pepseq.amino_acid.AminoAcid(char))
+        bucket4.append(pepseq.amino_acid.AminoAcid('N'))
 
     bucket5 = []
     for char in config.get('DEFAULT', 'bucket5').split(' '):
         bucket5.append(pepseq.amino_acid.AminoAcid(char))
-        bucket5.append(pepseq.amino_acid.AminoAcid('N'))
 
     bucket6 = []
     for char in config.get('DEFAULT', 'bucket6').split(' '):
@@ -106,20 +106,15 @@ def main():
     for char in config.get('DEFAULT', 'bucket8').split(' '):
         bucket8.append(pepseq.amino_acid.AminoAcid(char))
 
-    bucket9 = []
-    for char in config.get('DEFAULT', 'bucket9').split(' '):
-        bucket9.append(pepseq.amino_acid.AminoAcid(char))
-
-    possibilities = (bucket1, bucket2, bucket3,
-                     bucket4, bucket5, bucket6,
-                     bucket7, bucket8, bucket9)
+    possibilities = (bucket1, bucket2, bucket3, bucket4,
+                     bucket5, bucket6, bucket7, bucket8)
 
     peptides = []
     sequences = tuple(itertools.product(*possibilities))
     for sequence in sequences:
         if sequence[4].letter == 'K':
             peptide = pepseq.amino_acid.Peptide(sequence)
-            peptide.branch_before(4)
+            peptide.branch_before(3)
             peptides.append(peptide)
 
     peptides.sort()
