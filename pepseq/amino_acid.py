@@ -68,7 +68,6 @@ class Peptide(object):
         self.subweights.append(str(self.weight - self.amino_acids[0].weight))
         self.subweights.append(str(float(self.subweights[0]) - self.amino_acids[1].weight))
         self.subweights.append(str(float(self.subweights[1]) - self.amino_acids[2].weight))
-        self.subweights.append(str(float(self.subweights[2]) - self.amino_acids[3].weight))
 
         self.subweights.append(str(self.weight - 17.1 - self.amino_acids[-1].weight))
         self.subweights.append(str(float(self.subweights[-1]) - self.amino_acids[-2].weight))
