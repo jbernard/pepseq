@@ -112,7 +112,7 @@ def main():
     peptides = []
     sequences = tuple(itertools.product(*possibilities))
     for sequence in sequences:
-        if sequence[4].letter == 'K':
+        if sequence[3].letter == 'K':
             peptide = pepseq.amino_acid.Peptide(sequence)
             peptide.branch_before(3)
             peptides.append(peptide)
